@@ -32,7 +32,6 @@ def spo2Message():
     
     #找當下時間及其實間前五分鐘
     nowtime=datetime.datetime.now()
-    #pasttime=nowtime+datetime.timedelta(days=-1)
     nowtime_str=nowtime.strftime('%Y-%m-%d %H:%M:%S')
     nowdate_str=nowtime.strftime('%Y-%m-%d')
     pasttime=nowtime+datetime.timedelta(days=-1)
@@ -66,7 +65,7 @@ def spo2Message():
     
         #新資料做判斷，並撈rawdatalist，沒有資料加入message
         try:
-            if pasttime_str<newupdatetime_str and newupdatetime_str<nowtime_str:#期間內有新資料   
+            if pasttime_str<newupdatetime_str and newupdatetime_str<nowtime_str: #期間內有新資料   
                 rawlist = getRawList(server,XID,url)
             
             if newupdatetime_str<pasttime_str:
@@ -96,7 +95,7 @@ def spo2Message():
             if len(data_array)==0:
                 line_message=roomid+' ('+XID+')'+u" 未量測\n"
                 return line_message
-            lasttime=(datatime_str.split(" ")[1])[0:5]#最後量測時間       
+            lasttime=(datatime_str.split(" ")[1])[0:5] #最後量測時間       
             #刪除血氧心跳活動量不合理值
             a=len(data_array)
         except:
@@ -177,19 +176,16 @@ def spo2Message():
 
     print('SpO2 Check time:'+nowtime_str)
     print(mess_str)
-    #pm.push_message(mess_str)
+    pm.push_message(mess_str)
  
     return
 
 spo2Message()
-#執行排程
 
+#執行排程
 try:
     scheduler = BlockingScheduler()
-    #scheduler.add_job(spo2Message, 'interval', hours=1,id='my_job_id')
     scheduler.add_job(spo2Message, 'cron', day_of_week='mon-sun', hour=13, minute=00)
-    #scheduler.add_job(spo2Message, 'cron', day_of_week='mon-sun', hour=17, minute=00)
-    #scheduler.add_job(spo2Message, 'cron', day_of_week='mon-sun', hour=22, minute=00)
     scheduler.start()
        
 except KeyboardInterrupt:
