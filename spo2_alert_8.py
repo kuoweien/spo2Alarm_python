@@ -176,7 +176,7 @@ def spo2Message():
 
     print('SpO2 Check time:'+nowtime_str)
     print(mess_str)
-    pm.push_message(mess_str)
+    # pm.push_message(mess_str)
  
     return
 
